@@ -4,7 +4,10 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     tar
-RUN curl -s https://storage.googleapis.com/golang/go1.2.2.linux-amd64.tar.gz| tar -v -C /usr/local -xz
+    
+RUN wget https://golang.org/dl/go1.17.2.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz && \
+    rm go1.17.2.linux-amd64.tar.gz
 
 ENV LANGUAGE="en"
 ENV GOROOT /usr/local/go
