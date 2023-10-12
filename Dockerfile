@@ -2,7 +2,8 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     git \
-    curl 
+    curl \
+    tar
 
 RUN curl -O https://golang.org/dl/go1.21.3.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz && \
