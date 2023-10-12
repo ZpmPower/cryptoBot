@@ -5,9 +5,9 @@ RUN apt-get update && apt-get install -y \
     curl \
     tar
     
-RUN curl -O https://golang.org/dl/go1.17.2.linux-amd64.tar.gz && \
-    tar -C /usr/local -xzf go1.17.2.linux-amd64.tar.gz && \
-    rm go1.17.2.linux-amd64.tar.gz
+RUN curl -O https://golang.org/dl/go1.17.2.linux-amd64.tar && \
+    tar -C /usr/local -xf go1.17.2.linux-amd64.tar && \
+    rm go1.17.2.linux-amd64.tar
 
 
 ENV LANGUAGE="en"
