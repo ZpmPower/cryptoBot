@@ -1,7 +1,8 @@
 FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     ca-certificates \
-    git
+    git \
+    curl 
 # Download Go 1.2.2 and install it to /usr/local/go
 RUN curl -s https://storage.googleapis.com/golang/go1.2.2.linux-amd64.tar.gz| tar -v -C /usr/local -xz
 ENV LANGUAGE="en"
