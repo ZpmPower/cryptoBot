@@ -5,12 +5,29 @@ RUN apt-get update && apt-get install -y \
     curl \
     tar
 RUN curl -s https://storage.googleapis.com/golang/go1.2.2.linux-amd64.tar.gz| tar -v -C /usr/local -xz
+
 ENV LANGUAGE="en"
+ENV GOROOT /usr/local/go
+ENV GOPATH /go
+ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
+
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
-RUN cd cryptoBot
+
+# Set the working directory to the cloned repository
+WORKDIR /cryptoBot
+
+# Initialize the Go module
 RUN go mod init bot
+
+# Install Go dependencies
 RUN go get github.com/Syfaro/telegram-bot-api
 RUN go get github.com/lib/pq
+
+# Build the Go application
 RUN go build -o code crypto.go news.go
-EXPOSE 80/tcp
-CMD [ "./cryptoBot/code" ]
+
+# Expose the necessary port
+EXPOSE 80
+
+# Specify the command to run your Go application
+CMD ["./code"]
