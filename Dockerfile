@@ -9,11 +9,11 @@ RUN curl -O https://golang.org/dl/go1.21.3.linux-amd64.tar.gz && \
     tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz && \
     rm go1.21.3.linux-amd64.tar.gz
 
+# Set Go environment variables
+ENV PATH="/usr/local/go/bin:${PATH}"
+ENV GOPATH="/go"
+
 ENV LANGUAGE="en"
-ENV GOROOT /usr/local/go
-ENV GOPATH /go
-ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
- 
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
 
 # Set the working directory to the cloned repository
