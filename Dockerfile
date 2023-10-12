@@ -13,7 +13,7 @@ ENV LANGUAGE="en"
 ENV GOROOT /usr/local/go
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$GOROOT/bin:$PATH
-
+ 
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
 
 # Set the working directory to the cloned repository
