@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     tar
 
-RUN curl -O https://golang.org/dl/go1.21.3.linux-amd64.tar.gz && \
+RUN curl -O https://golang.org/dl/go1.21.3.linux-amd64.tar.gz && ls && \
     tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz && \
     rm go1.21.3.linux-amd64.tar.gz
 
