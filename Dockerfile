@@ -2,11 +2,14 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     git \
-    curl \
-    golang=2:1.21.3-1ubuntu1
+    curl 
+
+RUN curl -O https://golang.org/dl/go1.21.3.linux-amd64.tar.gz && \
+    tar -C /usr/local -xzf go1.21.3.linux-amd64.tar.gz && \
+    rm go1.21.3.linux-amd64.tar.gz
 
 # Set Go environment variables
-ENV PATH="/usr/lib/go-1.21.3/bin:${PATH}"
+ENV PATH="/usr/local/go/bin:${PATH}"
 ENV GOPATH="/go"
 
 ENV LANGUAGE="en"
