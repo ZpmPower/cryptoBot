@@ -2,10 +2,12 @@ FROM ubuntu:latest
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     git \
-    curl \
+    wget \
     tar
 
-RUN uname -m
+RUN wget https://golang.org/dl/go1.21.3.linux-386.tar.gz && \
+    tar -C /usr/local -xzf go1.21.3.linux-386.tar.gz && \
+    rm go1.21.3.linux-386.tar.gz
 
 ENV LANGUAGE="en"
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
