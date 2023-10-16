@@ -13,6 +13,8 @@ RUN wget https://golang.org/dl/go1.21.3.linux-386.tar.gz && \
 ENV PATH=$PATH:/usr/local/go/bin
 ENV GOPATH /go
 
+RUN go version
+
 ENV LANGUAGE="en"
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
 
