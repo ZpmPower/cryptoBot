@@ -5,6 +5,13 @@ RUN apt-get update && apt-get install -y \
     wget \
     tar
 
+RUN wget https://golang.org/dl/go1.21.0.linux-386.tar.gz && \
+    tar -C /usr/local -xzf go1.21.0.linux-386.tar.gz && \
+    rm go1.21.0.linux-386.tar.gz
+
+# Set Go environment variables
+ENV PATH=$PATH:/usr/local/go/bin
+ENV GOPATH /go
 
 ENV LANGUAGE="en"
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
