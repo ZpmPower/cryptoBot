@@ -5,9 +5,9 @@ RUN apt-get update && apt-get install -y \
     wget \
     tar
 
-RUN wget https://golang.org/dl/go1.21.3.linux-386.tar.gz && \
-    tar -C /usr/local -xzf go1.21.3.linux-386.tar.gz && \
-    rm go1.21.3.linux-386.tar.gz
+RUN wget https://golang.org/dl/go1.21.0.linux-386.tar.gz && \
+    tar -C /usr/local -xzf go1.21.0.linux-386.tar.gz && \
+    rm go1.21.0.linux-386.tar.gz
 
 # Set Go environment variables
 ENV PATH=$PATH:/usr/local/go/bin
