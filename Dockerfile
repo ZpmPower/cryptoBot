@@ -18,6 +18,7 @@ RUN go mod init bot
 # Install Go dependencies
 RUN go get github.com/Syfaro/telegram-bot-api
 RUN go get github.com/lib/pq
+RUN go get github.com/PuerkitoBio/goquery
 
 # Build the Go application
 RUN go build -o code crypto.go news.go
