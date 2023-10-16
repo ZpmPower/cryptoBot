@@ -25,7 +25,8 @@ WORKDIR /cryptoBot
 RUN go mod init bot
 
 # Install Go dependencies
-RUN go get -u github.com/go-telegram-bot-api/telegram-bot-api/v5
+RUN export GO111MODULE=on
+RUN go get -x github.com/go-telegram-bot-api/telegram-bot-api/v5
 RUN go get github.com/lib/pq
 RUN go get github.com/PuerkitoBio/goquery
 
