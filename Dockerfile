@@ -1,10 +1,11 @@
 FROM ubuntu:latest
+RUN add-apt-repository ppa:longsleep/golang-backports
 RUN apt-get update && apt-get install -y \
     ca-certificates \
     git \
     curl \
     tar \
-    golang
+    golang-go
 
 ENV LANGUAGE="en"
 RUN git clone https://github.com/ZpmPower/cryptoBot.git
