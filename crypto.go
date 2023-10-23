@@ -16,6 +16,80 @@ import (
 	_ "github.com/lib/pq"
 )
 
+func getTimeToNextFunding() (string, error) {
+
+	type ExchangeData struct {
+		Code string
+		Msg  string
+		Data struct {
+			BTC []struct {
+				ExchangeName    string `json:"exchangeName"`
+				OriginalSymbol  string `json:"originalSymbol"`
+				Symbol          string `json:"symbol"`
+				NextFundingTime int64  `json:"nextFundingTime"`
+			} `json:"BTC"`
+		}
+		Success bool
+	}
+
+	urlFundingTime := "https://open-api.coinglass.com/public/v2/perpetual_market?symbol=BTC"
+	req, err := http.NewRequest("GET", urlFundingTime, nil)
+	if err != nil {
+		fmt.Println("Error creating request:", err)
+		return "", err
+	}
+
+	req.Header.Add("coinglassSecret", cryptoAPIToken)
+	req.Header.Add("accept", "application/json")
+
+	client := http.Client{}
+	res, err := client.Do(req)
+	if err != nil {
+		fmt.Println("Error making request:", err)
+		return "", err
+	}
+	defer res.Body.Close()
+
+	if res.StatusCode != http.StatusOK {
+		fmt.Println("Request failed with status code:", res.Status)
+		return "", err
+	}
+
+	var exchangeData ExchangeData
+
+	decoder := json.NewDecoder(res.Body)
+	if err := decoder.Decode(&exchangeData); err != nil {
+		fmt.Println("Error decoding response:", err)
+		return "", err
+	}
+
+	exchangeName := "Binance"
+	var nextFundingMiliseconds float64
+	for _, entry := range exchangeData.Data.BTC {
+		if entry.ExchangeName == exchangeName {
+			nextFundingMiliseconds = float64(entry.NextFundingTime)
+		}
+	}
+
+	timestamp := time.Unix(int64(nextFundingMiliseconds)/1000, 0)
+	formattedTime := timestamp.Format("2006-01-02 15:04:05")
+
+	timeString := time.Now().Format("2006-01-02 15:04:05")
+
+	formattedTimeAsTime, _ := time.Parse("2006-01-02 15:04:05", formattedTime)
+	timeStringAsTime, _ := time.Parse("2006-01-02 15:04:05", timeString)
+
+	timeDiff := formattedTimeAsTime.Sub(timeStringAsTime)
+
+	hours := int(timeDiff.Hours())
+	minutes := int(timeDiff.Minutes()) % 60
+	seconds := int(timeDiff.Seconds()) % 60
+
+	formattedDiff := fmt.Sprintf("%02d:%02d:%02d", hours, minutes, seconds)
+
+	return formattedDiff, nil
+}
+
 type CoinInfo struct {
 	ExchangeName string  `json:"exchangeName"`
 	Symbol       string  `json:"symbol"`
@@ -106,7 +180,15 @@ func telegramBot() {
 					return responseData.Data[i].FundingRate > responseData.Data[j].FundingRate
 				})
 
-				responseString := "Biggest Funding rate:\n"
+				timeToNextFunding, err := getTimeToNextFunding()
+
+				if err != nil {
+					fmt.Println("Error making request:", err)
+					return
+				}
+
+				responseString := fmt.Sprintf("Countdown: *%s*\n\n", timeToNextFunding)
+				responseString += "Biggest Funding rate:\n"
 				for _, coin := range responseData.Data[:10] {
 					responseString += fmt.Sprintf("%.6f: #%s\n", coin.FundingRate, coin.Symbol)
 				}
@@ -121,6 +203,7 @@ func telegramBot() {
 				}
 
 				msg := tgbotapi.NewMessage(update.Message.Chat.ID, responseString)
+				msg.ParseMode = "Markdown"
 				bot.Send(msg)
 			case "/crypto_news":
 				numberOfNews := 10
